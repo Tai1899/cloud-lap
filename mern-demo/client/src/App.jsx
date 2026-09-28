@@ -53,7 +53,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif', maxWidth: '700px', margin: 'auto' }}>
-      <h2>Quản lý sinh viên</h2>
+      <h2>Quản lý sinh viên - v2.0</h2>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
         <input

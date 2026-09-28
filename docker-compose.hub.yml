@@ -1,0 +1,10 @@
+services:
+  backend:
+    image: tai1895/mern-backend:1.0
+    network_mode: "host"
+    environment:
+      - MONGODB_URI=mongodb+srv://237570tai:7NsVzF1SljMUczXG@cluster0.wlqiabd.mongodb.net/students?retryWrites=true&w=majority
+
+  frontend:
+    image: tai1895/mern-frontend:2.0
+    network_mode: "host"
