@@ -44,7 +44,7 @@ function App() {
     };
 
     try {
-      const response = await fetch("/api/students", {
+     const response = await fetch("https://mern-backend-1-0-obbm.onrender.com/api/students", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -53,7 +53,6 @@ function App() {
       });
 
       const result = await response.json().catch(() => ({}));
-git
       if (!response.ok) {
         throw new Error(result.error || "Thêm sinh viên thất bại");
       }
