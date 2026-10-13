@@ -6,7 +6,24 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Cấu hình CORS linh hoạt cho Production (Câu 58)
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 const normalizeStudentPayload = (body = {}) => ({
@@ -20,11 +37,10 @@ const studentSchema = new mongoose.Schema({
   name: String,
   email: String
 });
+
 const Student = mongoose.model('Student', studentSchema);
 
-
 // Câu 36: Xây dựng API GET
-
 app.get('/api/students', async (req, res) => {
   try {
     const students = await Student.find();
@@ -34,22 +50,19 @@ app.get('/api/students', async (req, res) => {
   }
 });
 
-
-// Câu 37: Xây dựng API POST 
-
+// Câu 37: Xây dựng API POST
 app.post('/api/students', async (req, res) => {
   try {
     const payload = normalizeStudentPayload(req.body);
-    const newStudent = await Student.create(payload);
+    const newStudent = new Student(payload);
+    await newStudent.save();
     res.status(201).json(newStudent);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-
-// Câu 38: Xây dựng API PUT 
-
+// Câu 38: Xây dựng API PUT
 app.put('/api/students/:id', async (req, res) => {
   try {
     const payload = normalizeStudentPayload(req.body);
@@ -60,9 +73,7 @@ app.put('/api/students/:id', async (req, res) => {
   }
 });
 
-
-// Câu 39: Xây dựng API DELETE 
-
+// Câu 39: Xây dựng API DELETE
 app.delete('/api/students/:id', async (req, res) => {
   try {
     await Student.findByIdAndDelete(req.params.id);
@@ -72,9 +83,7 @@ app.delete('/api/students/:id', async (req, res) => {
   }
 });
 
-
-// Kết nối DB và chạy Server 
-
+// Kết nối DB và chạy Server
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("MongoDB Atlas connected successfully!");
@@ -82,4 +91,4 @@ mongoose.connect(process.env.MONGODB_URI)
       console.log(`Server running on port ${PORT}`);
     });
   })
-  .catch((err) => console.error("Lỗi kết nối MongoDB:", err.message));
+  .catch(err => console.error("Lỗi kết nối MongoDB:", err.message));
