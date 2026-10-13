@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 function App() {
+  const API_URL = "https://mern-backend-1-0-obbm.onrender.com";
   const [students, setStudents] = useState([]);
 
   const [form, setForm] = useState({
@@ -52,7 +53,7 @@ function App() {
       });
 
       const result = await response.json().catch(() => ({}));
-
+git
       if (!response.ok) {
         throw new Error(result.error || "Thêm sinh viên thất bại");
       }
